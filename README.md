@@ -6,11 +6,19 @@ Welcome to the central repository of Exmicror, a leading manufacturer and distri
 
 - **`/sql`**: Contains the `init.sql` script for database initialization.
 - **`/docs`**: Relevant documentation for the development and use of the database.
+- **`/dump`**: Directory containing CSV files for test data. Data is automatically loaded into the database on container startup.
 
 ## Environment setup
 
-1. Clone this repository: `git clone git@github.com:yourname/exmicror-db.git`
+1. Clone this repository: `git clone git@github.com:DieeegoFC/Exmicror-DB.git`
 2. Ensure you have Docker installed in your environment.
+3. Create a `.env` file in the root directory and provide the necessary database credentials.
+
+```env
+DB_NAME=your_database_name
+DB_USER=your_database_user
+DB_PASSWORD=your_database_password
+```
 
 ## Start database with Docker
 
