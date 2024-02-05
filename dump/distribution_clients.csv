@@ -1,0 +1,11 @@
+id_distribution_client,client_name,client_type,client_contact,client_phone,client_email,contractual_details
+1,Wholesale Co.,wholesaler,John Doe,123456789,wholesale@example.com,Long-term partnership
+2,Retail Outlet,retailer,Jane Smith,987654321,retail@example.com,Flexible contract terms
+3,Wholesale Distributors,wholesaler,Bob Johnson,555666777,wholesaledist@example.com,Exclusive distribution rights
+4,Corner Store,retailer,Alice Brown,999888777,cornerstore@example.com,Agreement for regular supplies
+5,Regional Retail,retailer,Charlie White,111222333,regionalretail@example.com,Customized delivery schedule
+6,Global Wholesalers,wholesaler,Eva Green,444333222,globalwholesalers@example.com,International distribution agreement
+7,Local Market,retailer,Michael Davis,777888999,localmarket@example.com,Partnership for promotional events
+8,Specialty Retailers,retailer,Sarah Wilson,666555444,specialtyretailers@example.com,Special discounts for bulk orders
+9,Online Distributor,wholesaler,David Miller,123123123,onlinedistributor@example.com,E-commerce partnership
+10,Neighborhood Shop,retailer,Linda Lee,456456456,neighborhoodshop@example.com,Community engagement initiatives

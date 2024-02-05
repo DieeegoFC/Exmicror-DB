@@ -13,3 +13,4 @@ services:
     volumes:
       - ./data:/var/lib/postgresql/data
       - ./sql:/docker-entrypoint-initdb.d
+      - ./dump:/csv_data

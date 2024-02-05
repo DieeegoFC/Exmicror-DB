@@ -1,0 +1,11 @@
+id_return,id_order,returned_quantity,return_reason,corrective_actions
+1,1,2,"Damaged items","Refund processed, replacement shipped"
+2,2,1,"Incorrect size","Exchange initiated"
+3,3,3,"Unsatisfactory quality","Refund processed"
+4,4,1,"Changed mind","Return accepted, refund issued"
+5,5,2,"Late delivery","Compensation provided"
+6,6,1,"Defective product","Replacement sent, return label issued"
+7,7,3,"Not as described","Refund and return initiated"
+8,8,1,"Duplicate order","Return approved, refund issued"
+9,9,2,"Ordered wrong item","Exchange requested"
+10,10,1,"Received wrong item","Return authorized, replacement shipped"

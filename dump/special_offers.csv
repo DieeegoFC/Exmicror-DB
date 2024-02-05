@@ -1,0 +1,11 @@
+id_offer,offer_description,start_date,end_date,included_products
+1,"20% off on Electronics",2024-02-01,2024-02-15,"Laptops, Smartphones"
+2,"Buy 2, Get 1 Free on Clothing",2024-03-10,2024-03-20,"Shirts, Pants, Dresses"
+3,"Special Discount on Home Goods",2024-04-05,2024-04-15,"Furniture, Decor"
+4,"Weekend Flash Sale",2024-05-01,2024-05-02,"Various products"
+5,"Free Shipping on Orders Over $50",2024-06-01,2024-06-15,"All products"
+6,"Summer Clearance Sale",2024-07-10,2024-07-31,"Seasonal items"
+7,"Limited-time Offers on Electronics",2024-08-15,2024-08-30,"Gadgets, Accessories"
+8,"Buy 1, Get 1 50% off on Shoes",2024-09-05,2024-09-15,"Athletic shoes, Casual shoes"
+9,"Discounts for Loyalty Members",2024-10-01,2024-10-31,"Exclusive for loyalty members"
+10,"Holiday Specials",2024-11-20,2024-12-25,"Gift sets, Festive items"

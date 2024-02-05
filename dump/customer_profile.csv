@@ -1,0 +1,11 @@
+id_customer,customer_name,demographic_information,customer_contact,purchase_history,preferences
+1,John Doe,"Age: 30, Gender: Male",john@example.com,"Purchased items A, B","Preferred shipping: Express"
+2,Jane Smith,"Age: 28, Gender: Female",jane@example.com,"Purchased items C, D, E","Preferred payment: Credit card"
+3,Robert Johnson,"Age: 35, Gender: Male",robert@example.com,"Purchased items A, C, F","Preferred category: Electronics"
+4,Emily White,"Age: 25, Gender: Female",emily@example.com,"Purchased items B, D, G","Preferred payment: PayPal"
+5,Michael Brown,"Age: 40, Gender: Male",michael@example.com,"Purchased items E, F, H","Preferred shipping: Standard"
+6,Susan Miller,"Age: 32, Gender: Female",susan@example.com,"Purchased items A, B, C","Preferred category: Clothing"
+7,David Wilson,"Age: 28, Gender: Male",david@example.com,"Purchased items D, E, F","Preferred payment: Debit card"
+8,Amy Davis,"Age: 29, Gender: Female",amy@example.com,"Purchased items G, H, I","Preferred shipping: Express"
+9,Brian Taylor,"Age: 35, Gender: Male",brian@example.com,"Purchased items A, C, D","Preferred category: Home goods"
+10,Linda Clark,"Age: 26, Gender: Female",linda@example.com,"Purchased items B, E, H","Preferred payment: Credit card"

@@ -757,3 +757,14 @@ BEGIN
     RETURN FOUND;
 END;
 $$ LANGUAGE plpgsql;
+
+COPY PackagingDetails FROM '/csv_data/packaging_details.csv' DELIMITER ',' CSV HEADER;
+COPY BarcodeLabels FROM '/csv_data/barcode_labels.csv' DELIMITER ',' CSV HEADER;
+COPY ComplianceRegulations FROM '/csv_data/compliance_regulations.csv' DELIMITER ',' CSV HEADER;
+COPY DistributionClients FROM '/csv_data/distribution_clients.csv' DELIMITER ',' CSV HEADER;
+COPY Orders FROM '/csv_data/orders.csv' DELIMITER ',' CSV HEADER;
+COPY Invoices FROM '/csv_data/invoices.csv' DELIMITER ',' CSV HEADER;
+COPY ProductInventory FROM '/csv_data/product_inventory.csv' DELIMITER ',' CSV HEADER;
+COPY CustomerProfile FROM '/csv_data/customer_profile.csv' DELIMITER ',' CSV HEADER;
+COPY SpecialOffers FROM '/csv_data/special_offers.csv' DELIMITER ',' CSV HEADER;
+COPY Returns FROM '/csv_data/returns.csv' DELIMITER ',' CSV HEADER;
