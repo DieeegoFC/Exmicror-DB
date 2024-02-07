@@ -413,7 +413,7 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION delete_cascade_distribution_clients_orders()
 RETURNS TRIGGER AS $$
 BEGIN
-    DELETE FROM Orders WHERE id_client = OLD.id_distribution_client;
+    DELETE FROM Orders WHERE Orders.id_client = OLD.id_distribution_client;
     RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
@@ -428,7 +428,7 @@ EXECUTE FUNCTION delete_cascade_distribution_clients_orders();
 CREATE OR REPLACE FUNCTION delete_cascade_special_offer_orders()
 RETURNS TRIGGER AS $$
 BEGIN
-    DELETE FROM Orders WHERE id_offer = OLD.id_offer;
+    DELETE FROM Orders WHERE Orders.id_offer = OLD.id_offer;
     RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
@@ -515,7 +515,7 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION delete_cascade_distribution_clients_invoices()
 RETURNS TRIGGER AS $$
 BEGIN
-    DELETE FROM Invoices WHERE id_distribution_client = OLD.id_distribution_client;
+    DELETE FROM Invoices WHERE Invoices.id_distribution_client = OLD.id_distribution_client;
     RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
@@ -530,7 +530,7 @@ EXECUTE FUNCTION delete_cascade_distribution_clients_invoices();
 CREATE OR REPLACE FUNCTION delete_cascade_orders_invoices()
 RETURNS TRIGGER AS $$
 BEGIN
-    DELETE FROM Invoices WHERE id_order = OLD.id_order;
+    DELETE FROM Invoices WHERE Invoices.id_order = OLD.id_order;
     RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
@@ -545,7 +545,7 @@ EXECUTE FUNCTION delete_cascade_orders_invoices();
 CREATE OR REPLACE FUNCTION delete_cascade_special_offer_invoices()
 RETURNS TRIGGER AS $$
 BEGIN
-    DELETE FROM Invoices WHERE id_offer = OLD.id_offer;
+    DELETE FROM Invoices WHERE Invoices.id_offer = OLD.id_offer;
     RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
@@ -644,7 +644,7 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION delete_cascade_distribution_clients_product_inventory()
 RETURNS TRIGGER AS $$
 BEGIN
-    DELETE FROM ProductInventory WHERE id_distribution_client = OLD.id_distribution_client;
+    DELETE FROM ProductInventory WHERE ProductInventory.id_distribution_client = OLD.id_distribution_client;
     RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
@@ -659,7 +659,7 @@ EXECUTE FUNCTION delete_cascade_distribution_clients_product_inventory();
 CREATE OR REPLACE FUNCTION delete_cascade_orders_product_inventory()
 RETURNS TRIGGER AS $$
 BEGIN
-    DELETE FROM ProductInventory WHERE id_order = OLD.id_order;
+    DELETE FROM ProductInventory WHERE ProductInventory.id_order = OLD.id_order;
     RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
@@ -674,7 +674,7 @@ EXECUTE FUNCTION delete_cascade_orders_product_inventory();
 CREATE OR REPLACE FUNCTION delete_cascade_special_offer_product_inventory()
 RETURNS TRIGGER AS $$
 BEGIN
-    DELETE FROM ProductInventory WHERE id_offer = OLD.id_offer;
+    DELETE FROM ProductInventory WHERE ProductInventory.id_offer = OLD.id_offer;
     RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
@@ -761,7 +761,7 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION delete_cascade_distribution_clients_customer_profile()
 RETURNS TRIGGER AS $$
 BEGIN
-    DELETE FROM CustomerProfile WHERE id_distribution_client = OLD.id_distribution_client;
+    DELETE FROM CustomerProfile WHERE CustomerProfile.id_distribution_client = OLD.id_distribution_client;
     RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
@@ -904,7 +904,7 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION delete_cascade_distribution_clients_returns()
 RETURNS TRIGGER AS $$
 BEGIN
-    DELETE FROM Returns WHERE id_distribution_client = OLD.id_distribution_client;
+    DELETE FROM Returns WHERE Returns.id_distribution_client = OLD.id_distribution_client;
     RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
@@ -919,7 +919,7 @@ EXECUTE FUNCTION delete_cascade_distribution_clients_returns();
 CREATE OR REPLACE FUNCTION delete_cascade_orders_returns()
 RETURNS TRIGGER AS $$
 BEGIN
-    DELETE FROM Returns WHERE id_order = OLD.id_order;
+    DELETE FROM Returns WHERE Returns.id_order = OLD.id_order;
     RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
@@ -934,7 +934,7 @@ EXECUTE FUNCTION delete_cascade_orders_returns();
 CREATE OR REPLACE FUNCTION delete_cascade_special_offer_returns()
 RETURNS TRIGGER AS $$
 BEGIN
-    DELETE FROM Returns WHERE id_offer = OLD.id_offer;
+    DELETE FROM Returns WHERE Returns.id_offer = OLD.id_offer;
     RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
