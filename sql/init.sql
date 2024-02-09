@@ -409,36 +409,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Trigger for cascading delete in Orders table when DistributionClient is deleted
-CREATE OR REPLACE FUNCTION delete_cascade_distribution_clients_orders()
-RETURNS TRIGGER AS $$
-BEGIN
-    DELETE FROM Orders WHERE Orders.id_client = OLD.id_distribution_client;
-    RETURN OLD;
-END;
-$$ LANGUAGE plpgsql;
-
--- Trigger definition
-CREATE TRIGGER cascade_delete_distribution_clients_orders
-AFTER DELETE ON DistributionClients
-FOR EACH ROW
-EXECUTE FUNCTION delete_cascade_distribution_clients_orders();
-
--- Trigger for cascading delete in Orders table when a SpecialOffer is deleted
-CREATE OR REPLACE FUNCTION delete_cascade_special_offer_orders()
-RETURNS TRIGGER AS $$
-BEGIN
-    DELETE FROM Orders WHERE Orders.id_offer = OLD.id_offer;
-    RETURN OLD;
-END;
-$$ LANGUAGE plpgsql;
-
--- Trigger definition
-CREATE TRIGGER cascade_delete_special_offer_orders
-AFTER DELETE ON SpecialOffers
-FOR EACH ROW
-EXECUTE FUNCTION delete_cascade_special_offer_orders();
-
 -- Stored Procedure to insert invoices
 CREATE OR REPLACE FUNCTION insert_invoice(
     p_total_amount DECIMAL(10, 2),
@@ -510,51 +480,6 @@ BEGIN
     RETURN FOUND;
 END;
 $$ LANGUAGE plpgsql;
-
--- Trigger for cascading delete in Invoices table when DistributionClient is deleted
-CREATE OR REPLACE FUNCTION delete_cascade_distribution_clients_invoices()
-RETURNS TRIGGER AS $$
-BEGIN
-    DELETE FROM Invoices WHERE Invoices.id_distribution_client = OLD.id_distribution_client;
-    RETURN OLD;
-END;
-$$ LANGUAGE plpgsql;
-
--- Trigger definition
-CREATE TRIGGER cascade_delete_distribution_clients_invoices
-AFTER DELETE ON DistributionClients
-FOR EACH ROW
-EXECUTE FUNCTION delete_cascade_distribution_clients_invoices();
-
--- Trigger for cascading delete in Invoices table when an Order is deleted
-CREATE OR REPLACE FUNCTION delete_cascade_orders_invoices()
-RETURNS TRIGGER AS $$
-BEGIN
-    DELETE FROM Invoices WHERE Invoices.id_order = OLD.id_order;
-    RETURN OLD;
-END;
-$$ LANGUAGE plpgsql;
-
--- Trigger definition
-CREATE TRIGGER cascade_delete_orders_invoices
-AFTER DELETE ON Orders
-FOR EACH ROW
-EXECUTE FUNCTION delete_cascade_orders_invoices();
-
--- Trigger for cascading delete in Invoices table when a SpecialOffer is deleted
-CREATE OR REPLACE FUNCTION delete_cascade_special_offer_invoices()
-RETURNS TRIGGER AS $$
-BEGIN
-    DELETE FROM Invoices WHERE Invoices.id_offer = OLD.id_offer;
-    RETURN OLD;
-END;
-$$ LANGUAGE plpgsql;
-
--- Trigger definition
-CREATE TRIGGER cascade_delete_special_offer_invoices
-AFTER DELETE ON SpecialOffers
-FOR EACH ROW
-EXECUTE FUNCTION delete_cascade_special_offer_invoices();
 
 -- Stored Procedure to insert product inventory
 CREATE OR REPLACE FUNCTION insert_product_inventory(
@@ -640,51 +565,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Trigger for cascading delete in ProductInventory table when DistributionClient is deleted
-CREATE OR REPLACE FUNCTION delete_cascade_distribution_clients_product_inventory()
-RETURNS TRIGGER AS $$
-BEGIN
-    DELETE FROM ProductInventory WHERE ProductInventory.id_distribution_client = OLD.id_distribution_client;
-    RETURN OLD;
-END;
-$$ LANGUAGE plpgsql;
-
--- Trigger definition
-CREATE TRIGGER cascade_delete_distribution_clients_product_inventory
-AFTER DELETE ON DistributionClients
-FOR EACH ROW
-EXECUTE FUNCTION delete_cascade_distribution_clients_product_inventory();
-
--- Trigger for cascading delete in ProductInventory table when an Order is deleted
-CREATE OR REPLACE FUNCTION delete_cascade_orders_product_inventory()
-RETURNS TRIGGER AS $$
-BEGIN
-    DELETE FROM ProductInventory WHERE ProductInventory.id_order = OLD.id_order;
-    RETURN OLD;
-END;
-$$ LANGUAGE plpgsql;
-
--- Trigger definition
-CREATE TRIGGER cascade_delete_orders_product_inventory
-AFTER DELETE ON Orders
-FOR EACH ROW
-EXECUTE FUNCTION delete_cascade_orders_product_inventory();
-
--- Trigger for cascading delete in ProductInventory table when a SpecialOffer is deleted
-CREATE OR REPLACE FUNCTION delete_cascade_special_offer_product_inventory()
-RETURNS TRIGGER AS $$
-BEGIN
-    DELETE FROM ProductInventory WHERE ProductInventory.id_offer = OLD.id_offer;
-    RETURN OLD;
-END;
-$$ LANGUAGE plpgsql;
-
--- Trigger definition
-CREATE TRIGGER cascade_delete_special_offer_product_inventory
-AFTER DELETE ON SpecialOffers
-FOR EACH ROW
-EXECUTE FUNCTION delete_cascade_special_offer_product_inventory();
-
 -- Stored Procedure to insert customer profile
 CREATE OR REPLACE FUNCTION insert_customer_profile(
     p_customer_name VARCHAR(100),
@@ -756,21 +636,6 @@ BEGIN
     RETURN FOUND;
 END;
 $$ LANGUAGE plpgsql;
-
--- Trigger for cascading delete in CustomerProfile table when DistributionClient is deleted
-CREATE OR REPLACE FUNCTION delete_cascade_distribution_clients_customer_profile()
-RETURNS TRIGGER AS $$
-BEGIN
-    DELETE FROM CustomerProfile WHERE CustomerProfile.id_distribution_client = OLD.id_distribution_client;
-    RETURN OLD;
-END;
-$$ LANGUAGE plpgsql;
-
--- Trigger definition
-CREATE TRIGGER cascade_delete_distribution_clients_customer_profile
-AFTER DELETE ON DistributionClients
-FOR EACH ROW
-EXECUTE FUNCTION delete_cascade_distribution_clients_customer_profile();
 
 -- Stored Procedure to insert special offers
 CREATE OR REPLACE FUNCTION insert_special_offer(
@@ -862,7 +727,9 @@ RETURNS TABLE (
     returned_quantity INTEGER,
     return_reason TEXT,
     corrective_actions TEXT,
-    id_order INTEGER
+    id_order INTEGER,
+    id_distribution_client INTEGER,
+    id_offer INTEGER
 ) AS $$
 BEGIN
     RETURN QUERY SELECT * FROM Returns WHERE Returns.id_return = p_return_id;
@@ -900,50 +767,39 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Trigger for cascading delete in Returns table when DistributionClient is deleted
-CREATE OR REPLACE FUNCTION delete_cascade_distribution_clients_returns()
+-- Trigger para la regla de negocio 1: Actualización de la fecha de emisión de la factura
+CREATE OR REPLACE FUNCTION check_invoice_issuance_date()
 RETURNS TRIGGER AS $$
 BEGIN
-    DELETE FROM Returns WHERE Returns.id_distribution_client = OLD.id_distribution_client;
+    IF NEW.issuance_date < (SELECT order_date FROM Orders WHERE id_order = NEW.id_order) THEN
+        RAISE EXCEPTION 'The invoice issuance date cannot be earlier than the corresponding order date.';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Asociar el Trigger a la tabla Invoices
+CREATE TRIGGER enforce_invoice_issuance_date
+BEFORE UPDATE ON Invoices
+FOR EACH ROW
+EXECUTE FUNCTION check_invoice_issuance_date();
+
+-- Trigger para la regla de negocio 2: Restricción de eliminación de pedidos asociados a facturas
+CREATE OR REPLACE FUNCTION prevent_order_deletion_with_invoices()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM Invoices WHERE id_order = OLD.id_order) THEN
+        RAISE EXCEPTION 'Cannot delete orders associated with invoices.';
+    END IF;
     RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
 
--- Trigger definition
-CREATE TRIGGER cascade_delete_distribution_clients_returns
-AFTER DELETE ON DistributionClients
+-- Asociar el Trigger a la tabla Orders
+CREATE TRIGGER enforce_order_deletion_with_invoices
+BEFORE DELETE ON Orders
 FOR EACH ROW
-EXECUTE FUNCTION delete_cascade_distribution_clients_returns();
-
--- Trigger for cascading delete in Returns table when an Order is deleted
-CREATE OR REPLACE FUNCTION delete_cascade_orders_returns()
-RETURNS TRIGGER AS $$
-BEGIN
-    DELETE FROM Returns WHERE Returns.id_order = OLD.id_order;
-    RETURN OLD;
-END;
-$$ LANGUAGE plpgsql;
-
--- Trigger definition
-CREATE TRIGGER cascade_delete_orders_returns
-AFTER DELETE ON Orders
-FOR EACH ROW
-EXECUTE FUNCTION delete_cascade_orders_returns();
-
--- Trigger for cascading delete in Returns table when a SpecialOffer is deleted
-CREATE OR REPLACE FUNCTION delete_cascade_special_offer_returns()
-RETURNS TRIGGER AS $$
-BEGIN
-    DELETE FROM Returns WHERE Returns.id_offer = OLD.id_offer;
-    RETURN OLD;
-END;
-$$ LANGUAGE plpgsql;
-
--- Trigger definition
-CREATE TRIGGER cascade_delete_special_offer_returns
-AFTER DELETE ON SpecialOffers
-FOR EACH ROW
-EXECUTE FUNCTION delete_cascade_special_offer_returns();
+EXECUTE FUNCTION prevent_order_deletion_with_invoices();
 
 COPY PackagingDetails FROM '/csv_data/packaging_details.csv' DELIMITER ',' CSV HEADER;
 COPY BarcodeLabels FROM '/csv_data/barcode_labels.csv' DELIMITER ',' CSV HEADER;
@@ -955,3 +811,14 @@ COPY Invoices FROM '/csv_data/invoices.csv' DELIMITER ',' CSV HEADER;
 COPY ProductInventory FROM '/csv_data/product_inventory.csv' DELIMITER ',' CSV HEADER;
 COPY CustomerProfile FROM '/csv_data/customer_profile.csv' DELIMITER ',' CSV HEADER;
 COPY Returns FROM '/csv_data/returns.csv' DELIMITER ',' CSV HEADER;
+
+SELECT setval('packagingdetails_id_packaging_seq', (SELECT MAX(id_label) FROM BarcodeLabels));
+SELECT setval('barcodelabels_id_label_seq', (SELECT MAX(id_label) FROM BarcodeLabels));
+SELECT setval('complianceregulations_id_compliance_seq', (SELECT MAX(id_label) FROM BarcodeLabels));
+SELECT setval('distributionclients_id_distribution_client_seq', (SELECT MAX(id_label) FROM BarcodeLabels));
+SELECT setval('specialoffers_id_offer_seq', (SELECT MAX(id_label) FROM BarcodeLabels));
+SELECT setval('orders_id_order_seq', (SELECT MAX(id_label) FROM BarcodeLabels));
+SELECT setval('invoices_id_invoice_seq', (SELECT MAX(id_label) FROM BarcodeLabels));
+SELECT setval('productinventory_id_inventory_seq', (SELECT MAX(id_label) FROM BarcodeLabels));
+SELECT setval('customerprofile_id_customer_seq', (SELECT MAX(id_label) FROM BarcodeLabels));
+SELECT setval('returns_id_return_seq', (SELECT MAX(id_label) FROM BarcodeLabels));
