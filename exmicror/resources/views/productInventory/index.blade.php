@@ -47,5 +47,6 @@
             @endforeach
         </tbody>
     </table>
+    <a href="/">Back to Home</a>
 </body>
 </html>
