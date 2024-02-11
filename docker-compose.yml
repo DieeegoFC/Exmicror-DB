@@ -14,3 +14,22 @@ services:
       - ./data:/var/lib/postgresql/data
       - ./sql:/docker-entrypoint-initdb.d
       - ./dump:/csv_data
+
+  laravel:
+    image: ubuntu:latest
+    container_name: exmicror-app
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./exmicror:/app
+    command: >
+      bash -c "
+        export DEBIAN_FRONTEND=noninteractive &&
+        apt-get update &&
+        apt-get install -y php php-cli php-mbstring php-xml php-pgsql tzdata &&
+        ln -fs /usr/share/zoneinfo/Your/Timezone /etc/localtime &&
+        dpkg-reconfigure --frontend noninteractive tzdata &&
+        cd /app &&
+        php artisan serve --host=0.0.0.0 --port=8000"
+    depends_on:
+      - postgres
