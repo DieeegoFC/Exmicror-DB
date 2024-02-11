@@ -30,7 +30,7 @@ class ProductInventoryController extends Controller
         $idDistributionClient = $request->input('id_distribution_client');
         $idOffer = $request->input('id_offer');
 
-        $id = DB::selectOne('SELECT insert_product_inventory(?, ?, ?, ?, ?, ?, ?, ?, ?, ?) AS id', [
+        $id = DB::selectOne('SELECT insert_product_inventory(?, ?, ?, ?, ?, ?, ?, ?, ?) AS id', [
             $availableQuantity,
             $manufactureDate,
             $expirationDate,

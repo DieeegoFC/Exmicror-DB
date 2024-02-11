@@ -21,7 +21,7 @@
         <input type="number" name="id_compliance" id="id_compliance" required><br>
         <label for="id_order">Order ID:</label>
         <input type="number" name="id_order" id="id_order"><br>
-        <label for="id_distribution_client">Distribution vlient ID:</label>
+        <label for="id_distribution_client">Distribution client ID:</label>
         <input type="number" name="id_distribution_client" id="id_distribution_client"><br>
         <label for="id_offer">Offer ID:</label>
         <input type="number" name="id_offer" id="id_offer"><br>
