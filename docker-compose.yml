@@ -23,13 +23,15 @@ services:
     volumes:
       - ./exmicror:/app
     command: >
-      bash -c "
-        export DEBIAN_FRONTEND=noninteractive &&
-        apt-get update &&
-        apt-get install -y php php-cli php-mbstring php-xml php-pgsql tzdata &&
-        ln -fs /usr/share/zoneinfo/Your/Timezone /etc/localtime &&
-        dpkg-reconfigure --frontend noninteractive tzdata &&
-        cd /app &&
-        php artisan serve --host=0.0.0.0 --port=8000"
+        bash -c "
+          export DEBIAN_FRONTEND=noninteractive &&
+          apt-get update &&
+          apt-get install -y php php-cli php-mbstring php-xml php-pgsql php-curl tzdata composer &&
+          ln -fs /usr/share/zoneinfo/Your/Timezone /etc/localtime &&
+          dpkg-reconfigure --frontend noninteractive tzdata &&
+          cd /app &&
+          composer update &&
+          composer install &&
+          php artisan serve --host=0.0.0.0 --port=8000"
     depends_on:
       - postgres
